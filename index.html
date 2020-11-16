@@ -29,7 +29,10 @@
         }
         liff.init({ liffId: "1573344717-l5D05d7K" }, () => {
             if (liff.isLoggedIn()) {
-                runApp()
+                document.getElementById("btnShare").style.display = "block"
+                if (!liff.isInClient()) {
+                    document.getElementById("btnLogOut").style.display = "block"
+                }
             } else {
                 liff.login();
             }
