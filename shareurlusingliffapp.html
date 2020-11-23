@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share url using LIFF App</title>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.5.0/sdk.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container mt-3">
+        <form class="form-group">
+            <input name="shareUrl" type="url" id="sharedUrl" class="searchField form-control" />
+        </form>
+        <!-- ACTION BUTTON -->
+        <center>
+            <button id="getPreviewButton" class="btn btn-primary">預覽</button>
+            <button id="shareTargetPicker" class="btn btn-primary">Open Share Target Picker</button>
+            <button id="liffLoginButton" class="btn btn-success">LINE 登入</button>
+        </center>
+        <div id="shareTargetPickerMessage"></div>
+    </div>
+    <!-- PREVIEW INFO -->
+    <div id="previewInfo" class="container" style="display: none;">
+        <div id="previewPictureDiv" class="card">
+            <img id="image" src="" class="card-img-top" alt="Load image failed">
+            <div class="card-body">
+                <h5 id="title" class="card-title"></h5>
+                <p id="description" class="card-text"></p>
+            </div>
+        </div>
+    </div>
+    <div id="statusMessage">
+        <div id="isInClientMessage"></div>
+    </div>
+    <script>
+        var _title = "";
+        var _description = "";
+        var _image = "";
+        var _url = "";
+        var _aspectRatio = "20:13";
+
+        function initializeLiff(myLiffId) {
+            liff
+                .init({
+                    liffId: myLiffId
+                })
+                .then(() => {
+                    //start to use LIFF's api
+                    initializeApp();
+                })
+                .catch((err) => {
+
+                });
+        }
+
+        function initializeLiffOrDie(myLiffId) {
+            if (!myLiffId) {
+            } else {
+                initializeLiff(myLiffId);
+            }
+        }
+
+        function previewUrlInfo(url, isAutoSend = false) {
+            const cors = 'https://cors-anywhere.herokuapp.com/';
+            //handle facebook no preview issue
+            var oldUrl = new URL(url);
+            if (oldUrl.hostname.includes('facebook')) {
+                oldUrl.hostname = 'mobile.facebook.com';
+            }
+
+            console.log('url:' + oldUrl.href);
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+            var urlencoded = new URLSearchParams();
+            urlencoded.append("url", oldUrl.href);
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: urlencoded,
+                redirect: 'follow'
+            };
+
+
+            fetch(cors + 'https://www.iaunty.com/parse', requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result);
+
+                    _title = result.Title;
+                    _description = result.Description;
+                    _image = result.Image;
+                    _url = url;
+
+                    document.getElementById('title').textContent = _title;
+                    document.getElementById('description').textContent = _description;
+
+                    const previewPictureDiv = document.getElementById('previewPictureDiv');
+
+                    if (!_image) {
+                        const bold = document.createElement('b');
+                        bold.innerText = 'No Image!';
+                        previewPictureDiv.appendChild(bold);
+
+                    } else {
+                        _image = _image.replace('http://', 'https://');
+                        const img = document.getElementById('image');
+                        img.classList.add("card-img-top");
+                        img.onload = function () {
+                            console.log(this.width + 'x' + this.height);
+                            _aspectRatio = this.width + ":" + this.height;
+
+                        }
+                        img.src = _image;
+                        img.alt = 'Preview Picture';
+                    }
+
+                    togglePreviewData();
+                    document.getElementById('previewInfo').style.display = 'block';
+                })
+                .catch(error => console.log('error', error));
+        }
+
+        function sendFlexMessage() {
+            if (!_title && !_description && !_image) return;
+
+            liff.shareTargetPicker([
+                createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
+            ]
+            ).then(function (res) {
+                liff.closeWindow();
+            }).catch(function (res) {
+                document.getElementById('shareTargetPickerMessage').textContent = "Sending Failed:" + JSON.stringify(res);
+            });
+        }
+
+        function createFlexMessageData(title, description, image, url, aspectRatio) {
+            var myFlexContent = {
+                "type": "bubble",
+                "size": "kilo",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "action": {
+                        "type": "uri",
+                        "label": "前往",
+                        "uri": url,
+                    },
+                    "contents": []
+                }
+            };
+
+            if (_image) {
+                myFlexContent.hero = {
+                    "type": "image",
+                    "url": image,
+                    "size": "full",
+                    "aspectRatio": aspectRatio,
+                    "aspectMode": "cover",
+                    "action": {
+                        "type": "uri",
+                        "uri": url
+                    }
+                };
+            }
+            if (_title) {
+                myFlexContent.body.contents.push({
+                    "type": "text",
+                    "text": title,
+                    "weight": "bold",
+                    "size": "md",
+                    "wrap": true,
+                    "maxLines": 3
+                });
+            }
+
+            if (_description) {
+                myFlexContent.body.contents.push({
+                    "type": "box",
+                    "layout": "vertical",
+                    "margin": "lg",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                            "type": "box",
+                            "layout": "baseline",
+                            "spacing": "sm",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": description,
+                                    "wrap": true,
+                                    "color": "#666666",
+                                    "size": "xxs",
+                                    "flex": 5,
+                                    "maxLines": 7
+                                }
+                            ]
+                        }
+                    ]
+                });
+            }
+
+            var flex = {
+                "type": "flex",
+                "altText": _title,
+                "contents": myFlexContent,
+            };
+
+            return flex;
+        }
+
+        function toggleElement(elementId) {
+            const elem = document.getElementById(elementId);
+            if (elem.offsetWidth > 0 && elem.offsetHeight > 0) {
+                elem.style.display = 'none';
+            } else {
+                elem.style.display = 'block';
+            }
+        }
+
+        function togglePreviewData() {
+            toggleElement('previewInfo');
+        }
+
+        function initializeApp() {
+            var urlParam = ""
+            if (window.location.search.startsWith('?url=')) {
+                urlParam = window.location.search.substring(5);
+            }
+            if (urlParam !== "") {
+                console.log(urlParam);
+                document.getElementById("sharedUrl").value = urlParam;
+                previewUrlInfo(urlParam, true);
+            }
+            registerButtonHandlers();
+
+            if (liff.isLoggedIn()) {
+                toggleElement("liffLoginButton");
+            }
+        }
+
+        function registerButtonHandlers() {
+            //get preview
+            document.getElementById('getPreviewButton').addEventListener('click',
+                function () {
+                    var url = document.getElementById("sharedUrl").value;
+                    previewUrlInfo(url);
+                });
+
+            document.getElementById('shareTargetPicker').addEventListener('click', function () {
+                sendFlexMessage();
+            });
+
+            // login call, only when external browser is used
+            document.getElementById('liffLoginButton').addEventListener('click', function () {
+                if (!liff.isLoggedIn()) {
+                    // set `redirectUri` to redirect the user to a URL other than the front page of your LIFF app.
+                    liff.login();
+                }
+            });
+
+        }
+
+        window.onload = function () {
+            const defaultLiffId = "1573344717-916lVwEz";
+
+            // DO NOT CHANGE THIS
+            let myLiffId = "";
+
+            myLiffId = defaultLiffId;
+            initializeLiffOrDie(myLiffId);
+
+        }
+    </script>
+</body>
+</html>
