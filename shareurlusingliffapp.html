@@ -43,6 +43,8 @@
         var _image = "";
         var _url = "";
         var _aspectRatio = "20:13";
+        var userDisplayName = "";
+        var userPictureUrl = "";
 
         function initializeLiff(myLiffId) {
             liff
@@ -73,7 +75,7 @@
                 oldUrl.hostname = 'mobile.facebook.com';
             }
 
-            console.log('url:' + oldUrl.href);
+            //console.log('url:' + oldUrl.href);
             var myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -87,11 +89,10 @@
                 redirect: 'follow'
             };
 
-
             fetch(cors + 'https://www.iaunty.com/parse', requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result);
+                    //console.log(result);
 
                     _title = result.Title;
                     _description = result.Description;
@@ -141,16 +142,17 @@
         }
 
         function createFlexMessageData(title, description, image, url, aspectRatio) {
+
             var myFlexContent = {
                 "type": "bubble",
-                "size": "kilo",
+                "size": "giga",
                 "body": {
                     "type": "box",
                     "layout": "vertical",
                     "action": {
                         "type": "uri",
                         "label": "前往",
-                        "uri": url,
+                        "uri": url
                     },
                     "contents": []
                 }
@@ -230,7 +232,7 @@
         }
 
         function initializeApp() {
-            var urlParam = ""
+            var urlParam = "";
             if (window.location.search.startsWith('?url=')) {
                 urlParam = window.location.search.substring(5);
             }
@@ -239,10 +241,21 @@
                 document.getElementById("sharedUrl").value = urlParam;
                 previewUrlInfo(urlParam, true);
             }
+
             registerButtonHandlers();
 
             if (liff.isLoggedIn()) {
                 toggleElement("liffLoginButton");
+
+                liff.getProfile()
+                    .then(profile => {
+                        userDisplayName = profile.displayName;
+                        userPictureUrl = profile.pictureUrl;
+                        document.getElementById('shareTargetPickerMessage').textContent = userDisplayName;
+                    })
+                    .catch(err => {
+
+                    });
             }
         }
 
