@@ -456,7 +456,11 @@
 
             if (liff.isLoggedIn()) {
                 toggleElement("liffLoginButton");
-                toggleElement("liffLogoutButton");
+
+                if (!liff.isInClient()) {
+                    toggleElement("liffLogoutButton");
+                }
+                
 
                 liff.getProfile()
                     .then(profile => {
