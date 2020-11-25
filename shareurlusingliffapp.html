@@ -243,18 +243,28 @@
             }
 
             if (_image) {
-                myFlexContent.hero.contents.push({
-                    "type": "image",
-                    "url": image,
-                    "size": "full",
-                    "aspectRatio": aspectRatio,
-                    "aspectMode": "cover",
-                    "action": {
-                        "type": "uri",
-                        "uri": url
-                    }
-                });
-            }
+                myFlexContent.hero = {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "image",
+                            "url": image,
+                            "size": "full",
+                            "aspectRatio": aspectRatio,
+                            "aspectMode": "cover",
+                            "action": {
+                                "type": "uri",
+                                "uri": url
+                            }
+                        }
+                    ],
+                    "borderWidth": "2px",
+                    "borderColor": "#ffffff",
+                    "cornerRadius": "6px"
+                }
+            };
+
 
             if (_title) {
                 myFlexContent.body.contents.push({
