@@ -19,7 +19,8 @@
         <!-- ACTION BUTTON -->
         <center>
             <button id="getPreviewButton" class="btn btn-primary">預覽</button>
-            <button id="shareTargetPicker" class="btn btn-primary">Open Share Target Picker</button>
+            <button id="shareTargetPicker" class="btn btn-primary">分享好友</button>
+            <button id="directSendMessage" class="btn btn-info">直接發送</button>
             <button id="liffLoginButton" class="btn btn-success">LINE 登入</button>
         </center>
         <div id="shareTargetPickerMessage"></div>
@@ -37,7 +38,8 @@
     <div id="statusMessage">
         <div id="isInClientMessage"></div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://static.line-scdn.net/liff/edge/2/non-ios-extensions.js" type="text/javascript"></script>
     <script>
         var _title = "";
         var _description = "";
@@ -135,6 +137,19 @@
             liff.shareTargetPicker([
                 createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
             ]
+            ).then(function (res) {
+                liff.closeWindow();
+            }).catch(function (res) {
+                document.getElementById('shareTargetPickerMessage').textContent = "Sending Failed:" + JSON.stringify(res);
+            });
+        }
+
+        function directSendFlexMessage() {
+            if (!_title && !_description && !_image) return;
+
+            liff.sendMessages([
+                    createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
+                ]
             ).then(function (res) {
                 liff.closeWindow();
             }).catch(function (res) {
@@ -263,8 +278,7 @@
                     "cornerRadius": "6px"
                 }
             };
-
-
+            
             if (_title) {
                 myFlexContent.body.contents.push({
                     "type": "text",
@@ -403,9 +417,7 @@
                     ]
                 });
             }
-
-
-
+            
             var flex = {
                 "type": "flex",
                 "altText": _title,
@@ -465,6 +477,10 @@
                 });
 
             document.getElementById('shareTargetPicker').addEventListener('click', function () {
+                sendFlexMessage();
+            });
+
+            document.getElementById('directSendMessage').addEventListener('click', function () {
                 sendFlexMessage();
             });
 
