@@ -194,16 +194,18 @@
                             "borderWidth": "2px",
                             "borderColor": "#954db3",
                             "cornerRadius": "50px",
-                            "contents": []
+                            "contents": [
+                                {
+                                    "type": "image",
+                                    "url": userPictureUrl,
+                                    "size": "full",
+                                    "aspectMode": "cover"
+                                }
+                            ]
                         }
                     ]
                 }
-                userPicture.contents.contents.push({
-                    "type": "image",
-                    "url": userPictureUrl,
-                    "size": "full",
-                    "aspectMode": "cover"
-                });
+
 
                 myFlexContent.header.contents.push(userPicture);
             }
@@ -217,13 +219,15 @@
                     "offsetTop": "none",
                     "paddingAll": "none",
                     "paddingStart": "none",
-                    "contents": []
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": userDisplayName + "分享金牌月嫂",
+                            "size": "md"
+                        }
+                    ]
                 }
-                userName.contents.push({
-                    "type": "text",
-                    "text": userDisplayName + "分享金牌月嫂",
-                    "size": "md"
-                });
+
 
                 const today = new Date();
                 const month = today.getMonth() + 1;
