@@ -161,6 +161,9 @@
 
         function createFlexMessageData(title, description, image, url, aspectRatio) {
 
+            const liffLink = liff.permanentLink.createUrl()+'?url='+url;
+            console.log(liffLink);
+
             var myFlexContent = {
                 "type": "bubble",
                 "size": "giga",
