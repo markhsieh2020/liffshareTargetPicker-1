@@ -86,7 +86,7 @@
 
             var urlencoded = new URLSearchParams();
             urlencoded.append("url", oldUrl.href);
-            console.log(urlencoded.toString());
+            console.log((new URL(url)).toString());
 
             var requestOptions = {
                 method: 'POST',
@@ -102,7 +102,7 @@
                     _title = result.Title;
                     _description = result.Description;
                     _image = result.Image;
-                    _url = urlencoded.toString();
+                    _url = (new URL(url)).toString();
 
                     document.getElementById('title').textContent = _title;
                     document.getElementById('description').textContent = _description;
