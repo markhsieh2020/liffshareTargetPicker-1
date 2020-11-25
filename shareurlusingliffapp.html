@@ -98,11 +98,11 @@
             fetch(cors + 'https://www.iaunty.com/parse', requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                   
+
                     _title = result.Title;
                     _description = result.Description;
                     _image = result.Image;
-                    _url = urlencoded;
+                    _url = urlencoded.toString();
 
                     document.getElementById('title').textContent = _title;
                     document.getElementById('description').textContent = _description;
