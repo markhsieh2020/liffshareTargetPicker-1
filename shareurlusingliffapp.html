@@ -149,7 +149,10 @@
             if (!_title && !_description && !_image) return;
 
             liff.sendMessages([
-                createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
+                    {
+                        type: 'text',
+                        text: 'Hello, World!'
+                    }
             ]
             ).then(function (res) {
                 liff.closeWindow();
@@ -464,7 +467,7 @@
                         document.getElementById('shareTargetPickerMessage').textContent = userDisplayName;
                     })
                     .catch(err => {
-
+                        console.log('error:' + err);
                     });
             }
         }
