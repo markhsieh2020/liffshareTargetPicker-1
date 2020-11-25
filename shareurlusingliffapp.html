@@ -155,10 +155,10 @@
                     }
                 ])
                 .then(() => {
-                    console.log('message sent');
+                    document.getElementById('shareTargetPickerMessage').textContent = 'message sent';
                 })
                 .catch((err) => {
-                    console.log('error', err);
+                      document.getElementById('shareTargetPickerMessage').textContent =err);
                 });
         }
 
