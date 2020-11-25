@@ -465,7 +465,7 @@
                         document.getElementById('shareTargetPickerMessage').textContent = userDisplayName;
                     })
                     .catch(err => {
-                        console.log('error:' + err);
+                        document.getElementById('shareTargetPickerMessage').textContent ='error:' + err;
                     });
             }
         }
@@ -499,6 +499,9 @@
                 if (liff.isLoggedIn()) {
                     liff.logout();
                     document.getElementById('shareTargetPickerMessage').textContent = '已登出';
+                    toggleElement("liffLoginButton");
+                    toggleElement("liffLogoutButton");
+                    liff.closeWindow();
                 }
             });
 
