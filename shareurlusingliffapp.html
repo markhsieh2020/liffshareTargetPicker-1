@@ -86,6 +86,7 @@
 
             var urlencoded = new URLSearchParams();
             urlencoded.append("url", oldUrl.href);
+            console.log(urlencoded);
 
             var requestOptions = {
                 method: 'POST',
@@ -97,12 +98,11 @@
             fetch(cors + 'https://www.iaunty.com/parse', requestOptions)
                 .then(response => response.json())
                 .then(result => {
-                    //console.log(result);
-
+                   
                     _title = result.Title;
                     _description = result.Description;
                     _image = result.Image;
-                    _url = encodeURI(url);
+                    _url = urlencoded;
 
                     document.getElementById('title').textContent = _title;
                     document.getElementById('description').textContent = _description;
