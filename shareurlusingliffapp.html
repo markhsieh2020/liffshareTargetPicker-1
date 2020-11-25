@@ -22,6 +22,7 @@
             <button id="shareTargetPicker" class="btn btn-primary">分享好友</button>
             <button id="directSendMessage" class="btn btn-info">直接發送</button>
             <button id="liffLoginButton" class="btn btn-success">LINE 登入</button>
+            <button id="liffLogoutButton" class="btn btn-warning">LINE 登出</button>
         </center>
         <div id="shareTargetPickerMessage"></div>
     </div>
@@ -38,8 +39,8 @@
     <div id="statusMessage">
         <div id="isInClientMessage"></div>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
-<script src="https://static.line-scdn.net/liff/edge/2/non-ios-extensions.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2/non-ios-extensions.js" type="text/javascript"></script>
     <script>
         var _title = "";
         var _description = "";
@@ -59,7 +60,7 @@
                     initializeApp();
                 })
                 .catch((err) => {
-
+                    console.log('error:' + err);
                 });
         }
 
@@ -148,8 +149,8 @@
             if (!_title && !_description && !_image) return;
 
             liff.sendMessages([
-                    createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
-                ]
+                createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
+            ]
             ).then(function (res) {
                 liff.closeWindow();
             }).catch(function (res) {
@@ -278,7 +279,7 @@
                     "cornerRadius": "6px"
                 }
             };
-            
+
             if (_title) {
                 myFlexContent.body.contents.push({
                     "type": "text",
@@ -417,7 +418,7 @@
                     ]
                 });
             }
-            
+
             var flex = {
                 "type": "flex",
                 "altText": _title,
@@ -489,6 +490,13 @@
                 if (!liff.isLoggedIn()) {
                     // set `redirectUri` to redirect the user to a URL other than the front page of your LIFF app.
                     liff.login();
+                }
+            });
+
+            // logout call, only when external browser is used
+            document.getElementById('liffLogoutButton').addEventListener('click', function () {
+                if (!liff.isLoggedIn()) {
+                    liff.logout();
                 }
             });
 
