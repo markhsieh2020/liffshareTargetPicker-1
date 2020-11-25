@@ -22,7 +22,7 @@
             <button id="shareTargetPicker" class="btn btn-primary">分享好友</button>
             <button id="directSendMessage" class="btn btn-info">直接發送</button>
             <button id="liffLoginButton" class="btn btn-success">LINE 登入</button>
-            <button id="liffLogoutButton" class="btn btn-warning"  style="display: none;">LINE 登出</button>
+            <button id="liffLogoutButton" class="btn btn-warning" style="display: none;">LINE 登出</button>
         </center>
         <div id="shareTargetPickerMessage"></div>
     </div>
@@ -149,16 +149,16 @@
             //if (!_title && !_description && !_image) return;
 
             liff.sendMessages([
-                    {
-                        type: 'text',
-                        text: 'Hello, World!'
-                    }
-                ])
+                {
+                    type: 'text',
+                    text: 'Hello, World!'
+                }
+            ])
                 .then(() => {
                     document.getElementById('shareTargetPickerMessage').textContent = 'message sent';
                 })
                 .catch((err) => {
-                      document.getElementById('shareTargetPickerMessage').textContent =err);
+                    document.getElementById('shareTargetPickerMessage').textContent = err;
                 });
         }
 
