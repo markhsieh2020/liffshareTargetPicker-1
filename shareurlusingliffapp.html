@@ -146,20 +146,104 @@
             var myFlexContent = {
                 "type": "bubble",
                 "size": "giga",
-                "body": {
+                "header": {
                     "type": "box",
-                    "layout": "vertical",
+                    "layout": "horizontal",
+                    "height": "82px",
+                    "offsetBottom": "none",
+                    "offsetTop": "none",
+                    "spacing": "none",
+                    "offsetStart": "none",
+                    "paddingAll": "xl",
                     "action": {
                         "type": "uri",
                         "label": "前往",
                         "uri": url
                     },
                     "contents": []
+                },
+                "hero": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "content": [],
+                    "borderWidth": "2px",
+                    "borderColor": "#ffffff",
+                    "cornerRadius": "6px"
+                },
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "content": []
                 }
             };
 
+            if (userPictureUrl) {
+                var userPicture = {
+                    "type": "box",
+                    "layout": "vertical",
+                    "height": "48px",
+                    "paddingAll": "none",
+                    "margin": "none",
+                    "spacing": "none",
+                    "offsetStart": "none",
+                    "width": "48px",
+                    "contents": [
+                        {
+                            "type": "box",
+                            "layout": "vertical",
+                            "borderWidth": "2px",
+                            "borderColor": "#954db3",
+                            "cornerRadius": "50px",
+                            "contents": []
+                        }
+                    ]
+                }
+                userPicture.contents.contents.push({
+                    "type": "image",
+                    "url": userPictureUrl,
+                    "size": "full",
+                    "aspectMode": "cover"
+                });
+
+                myFlexContent.header.contents.push(userPicture);
+            }
+
+            if (userDisplayName) {
+                var userName = {
+                    "type": "box",
+                    "layout": "vertical",
+                    "offsetStart": "md",
+                    "spacing": "md",
+                    "offsetTop": "none",
+                    "paddingAll": "none",
+                    "paddingStart": "none",
+                    "contents": []
+                }
+                userName.contents.push({
+                    "type": "text",
+                    "text": userDisplayName + "分享金牌月嫂",
+                    "size": "md"
+                });
+
+                const today = new Date();
+                const month = today.getMonth() + 1;
+                const day = today.getDate();
+                const hh = today.getHours();
+                const mm = today.getMinutes();
+
+                userName.contents.push({
+                    "type": "text",
+                    "text": month + "月" + day + "日 " + hh + ":" + mm,
+                    "size": "xs",
+                    "offsetStart": "none",
+                    "color": "#b7b7b7"
+                });
+
+                myFlexContent.header.contents.push(userName);
+            }
+
             if (_image) {
-                myFlexContent.hero = {
+                myFlexContent.hero.contents.push({
                     "type": "image",
                     "url": image,
                     "size": "full",
@@ -169,8 +253,9 @@
                         "type": "uri",
                         "uri": url
                     }
-                };
+                });
             }
+
             if (_title) {
                 myFlexContent.body.contents.push({
                     "type": "text",
