@@ -37,6 +37,7 @@
     <div id="statusMessage">
         <div id="isInClientMessage"></div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script>
         var _title = "";
         var _description = "";
@@ -229,15 +230,9 @@
                 }
 
 
-                const today = new Date();
-                const month = today.getMonth() + 1;
-                const day = today.getDate();
-                const hh = today.getHours();
-                const mm = today.getMinutes();
-
                 userName.contents.push({
                     "type": "text",
-                    "text": month + "月" + day + "日 " + hh + ":" + mm,
+                    "text": dayjs().format('M月D日 HH:mm'),
                     "size": "xs",
                     "offsetStart": "none",
                     "color": "#b7b7b7"
