@@ -24,7 +24,7 @@
             <button id="liffLoginButton" class="btn btn-success">LINE 登入</button>
             <button id="liffLogoutButton" class="btn btn-warning" style="display: none;">LINE 登出</button>
         </center>
-        <div id="shareTargetPickerMessage"></div>
+        <div id="shareTargetPickerMessage">請先預覽在分享</div>
     </div>
     <!-- PREVIEW INFO -->
     <div id="previewInfo" class="container" style="display: none;">
@@ -470,7 +470,7 @@
                     .then(profile => {
                         userDisplayName = profile.displayName;
                         userPictureUrl = profile.pictureUrl;
-                        document.getElementById('shareTargetPickerMessage').textContent = userDisplayName;
+                        //document.getElementById('shareTargetPickerMessage').textContent = userDisplayName;
                     })
                     .catch(err => {
                         document.getElementById('shareTargetPickerMessage').textContent = 'error:' + err;
