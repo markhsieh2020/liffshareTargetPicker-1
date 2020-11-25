@@ -22,7 +22,7 @@
             <button id="shareTargetPicker" class="btn btn-primary">分享好友</button>
             <button id="directSendMessage" class="btn btn-info">直接發送</button>
             <button id="liffLoginButton" class="btn btn-success">LINE 登入</button>
-            <button id="liffLogoutButton" class="btn btn-warning"  style="display: none;">LINE 登出</button>
+            <button id="liffLogoutButton" class="btn btn-warning" style="display: none;">LINE 登出</button>
         </center>
         <div id="shareTargetPickerMessage"></div>
     </div>
@@ -498,6 +498,7 @@
             document.getElementById('liffLogoutButton').addEventListener('click', function () {
                 if (!liff.isLoggedIn()) {
                     liff.logout();
+                    document.getElementById('shareTargetPickerMessage').textContent = '已登出';
                 }
             });
 
