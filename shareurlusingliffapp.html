@@ -214,7 +214,7 @@
                 Swal.fire({
                     icon: "error",
                     title: "發生錯誤",
-                    text: JSON.stringify(res)
+                    text: "發送失敗，請於LINE內進行發送，Sending Failed:" + JSON.stringify(res)
                 });
                 //document.getElementById('shareTargetPickerMessage').textContent = "發送失敗，請於LINE內進行發送，Sending Failed:" + JSON.stringify(res);
             });
