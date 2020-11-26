@@ -191,7 +191,7 @@
                     createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
                 ]
             ).then(function (res) {
-                await Swal.fire({
+                Swal.fire({
                     icon: "success",
                     title: "名片已分享"
                 });
