@@ -65,7 +65,7 @@
                 previewUrlInfo(urlParam, true);
             }
 
-            registerButtonHandlers();
+            window.registerButtonHandlers;
 
             if (liff.isLoggedIn()) {
                 toggleElement("liffLoginButton");
@@ -74,8 +74,43 @@
                     toggleElement("liffLogoutButton");
                 }
             }
-          
-        })
+
+        }),
+            window.registerButtonHandlers = (async () => {
+                //get preview
+                document.getElementById('getPreviewButton').addEventListener('click',
+                    function () {
+                        var url = document.getElementById("sharedUrl").value;
+                        previewUrlInfo(url);
+                    });
+
+                document.getElementById('shareTargetPicker').addEventListener('click', function () {
+                    sendFlexMessage();
+                });
+
+                document.getElementById('directSendMessage').addEventListener('click', function () {
+                    directSendFlexMessage();
+                });
+
+                // login call, only when external browser is used
+                document.getElementById('liffLoginButton').addEventListener('click', function () {
+                    if (!liff.isLoggedIn()) {
+                        // set `redirectUri` to redirect the user to a URL other than the front page of your LIFF app.
+                        liff.login();
+                    }
+                });
+
+                // logout call, only when external browser is used
+                document.getElementById('liffLogoutButton').addEventListener('click', function () {
+                    if (liff.isLoggedIn()) {
+                        liff.logout();
+                        document.getElementById('shareTargetPickerMessage').textContent = '已登出';
+                        toggleElement("liffLoginButton");
+                        toggleElement("liffLogoutButton");
+                        liff.closeWindow();
+                    }
+                });
+            });
 
         const loginPromise = (async () => {
             let e;
@@ -96,8 +131,6 @@
             } catch (e) { }
             return window.initializeApp(e), e
         })();
-
-
 
         function initializeLiff(myLiffId) {
             liff
@@ -490,76 +523,7 @@
             toggleElement('previewInfo');
         }
 
-        function initializeApp() {
-            console.log(window.location.search);
-            var urlParam = "";
-            if (window.location.search.startsWith('?url=')) {
-                urlParam = window.location.search.substring(5);
-            }
-            if (urlParam !== "") {
-                console.log(urlParam);
-                document.getElementById("sharedUrl").value = urlParam;
-                previewUrlInfo(urlParam, true);
-            }
-
-            registerButtonHandlers();
-
-            if (liff.isLoggedIn()) {
-                toggleElement("liffLoginButton");
-
-                if (!liff.isInClient()) {
-                    toggleElement("liffLogoutButton");
-                }
-
-
-                liff.getProfile()
-                    .then(profile => {
-                        userDisplayName = profile.displayName;
-                        userPictureUrl = profile.pictureUrl;
-                        //document.getElementById('shareTargetPickerMessage').textContent = userDisplayName;
-                    })
-                    .catch(err => {
-                        document.getElementById('shareTargetPickerMessage').textContent = 'error:' + err;
-                    });
-            }
-        }
-
-        function registerButtonHandlers() {
-            //get preview
-            document.getElementById('getPreviewButton').addEventListener('click',
-                function () {
-                    var url = document.getElementById("sharedUrl").value;
-                    previewUrlInfo(url);
-                });
-
-            document.getElementById('shareTargetPicker').addEventListener('click', function () {
-                sendFlexMessage();
-            });
-
-            document.getElementById('directSendMessage').addEventListener('click', function () {
-                directSendFlexMessage();
-            });
-
-            // login call, only when external browser is used
-            document.getElementById('liffLoginButton').addEventListener('click', function () {
-                if (!liff.isLoggedIn()) {
-                    // set `redirectUri` to redirect the user to a URL other than the front page of your LIFF app.
-                    liff.login();
-                }
-            });
-
-            // logout call, only when external browser is used
-            document.getElementById('liffLogoutButton').addEventListener('click', function () {
-                if (liff.isLoggedIn()) {
-                    liff.logout();
-                    document.getElementById('shareTargetPickerMessage').textContent = '已登出';
-                    toggleElement("liffLoginButton");
-                    toggleElement("liffLogoutButton");
-                    liff.closeWindow();
-                }
-            });
-
-        }
+     
 
         window.onload = async () => {
             //const defaultLiffId = "1573344717-916lVwEz";
