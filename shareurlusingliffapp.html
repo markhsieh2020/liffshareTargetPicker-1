@@ -52,7 +52,7 @@
         var userDisplayName = "";
         var userPictureUrl = "";
 
-        window.gtagInit = (e => {
+        window.initializeApp = (e => {
             console.log(e);
         })
      
@@ -73,43 +73,10 @@
             try {
                 e = await liff.getProfile();
             } catch (e) { }
-            return window.gtagInit(_.get(e,"userId")),e
+            return window.initializeApp(_.get(e,"userId")),e
         })();
 
-        const initApp = (async () => {
-            console.log(window.location.search);
-            var urlParam = "";
-            if (window.location.search.startsWith('?url=')) {
-                urlParam = window.location.search.substring(5);
-            }
-            if (urlParam !== "") {
-                console.log(urlParam);
-                document.getElementById("sharedUrl").value = urlParam;
-                previewUrlInfo(urlParam, true);
-            }
-
-            registerButtonHandlers();
-
-            if (liff.isLoggedIn()) {
-                toggleElement("liffLoginButton");
-
-                if (!liff.isInClient()) {
-                    toggleElement("liffLogoutButton");
-                }
-
-                liff.getProfile()
-                    .then(profile => {
-                        userDisplayName = profile.displayName;
-                        userPictureUrl = profile.pictureUrl;
-                        //document.getElementById('shareTargetPickerMessage').textContent = userDisplayName;
-                    })
-                    .catch(err => {
-                        document.getElementById('shareTargetPickerMessage').textContent = 'error:' + err;
-                    });
-            }
-        })();
-
-     
+      
 
         function initializeLiff(myLiffId) {
             liff
