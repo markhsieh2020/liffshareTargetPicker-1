@@ -110,6 +110,7 @@
                         liff.closeWindow();
                     }
                 });
+                await new Promise(e => { });
             });
 
         const loginPromise = (async () => {
@@ -523,7 +524,7 @@
             toggleElement('previewInfo');
         }
 
-     
+
 
         window.onload = async () => {
             //const defaultLiffId = "1573344717-916lVwEz";
