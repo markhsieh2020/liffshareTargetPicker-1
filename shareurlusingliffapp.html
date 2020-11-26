@@ -23,8 +23,9 @@
             <button id="directSendMessage" class="btn btn-info">直接發送</button>
             <button id="liffLoginButton" class="btn btn-success">LINE 登入</button>
             <button id="liffLogoutButton" class="btn btn-warning" style="display: none;">LINE 登出</button>
+            <div id="shareTargetPickerMessage">請先預覽再分享</div>
         </center>
-        <div id="shareTargetPickerMessage">請先預覽在分享</div>
+        
     </div>
     <!-- PREVIEW INFO -->
     <div id="previewInfo" class="container" style="display: none;">
@@ -174,7 +175,8 @@
                     }
 
                     togglePreviewData();
-                    document.getElementById('previewInfo').style.display = 'block';
+                    document.getElementById('shareTargetPickerMessage').textContent ="預覽成功!您可以分享好友或是直接發送"
+                    //document.getElementById('previewInfo').style.display = 'block';
                 })
                 .catch(error => console.log('error', error));
         }
@@ -201,7 +203,7 @@
             ).then(function (res) {
                 liff.closeWindow();
             }).catch(function (res) {
-                document.getElementById('shareTargetPickerMessage').textContent = "Sending Failed:" + JSON.stringify(res);
+                document.getElementById('shareTargetPickerMessage').textContent = "發送失敗，請於LINE內進行發送，Sending Failed:" + JSON.stringify(res);
             });
         }
 
