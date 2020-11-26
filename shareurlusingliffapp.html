@@ -43,6 +43,25 @@
     <script src="https://static.line-scdn.net/liff/edge/2/non-ios-extensions.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-base64@3/base64.min.js"></script>
     <script>
+        const loginPromise = (async () => {
+            let e;
+            await liff.init({
+                liffId: "1573344717-916lVwEz"
+            }),
+                new URL(window.location).searchParams.get('liff.state') &&
+                await new Promise(e => { }
+                ),
+                liff.isLoggedIn() ||
+                (liff.login({
+                    redirectUri: location.href
+                }),
+                    await new Promise(e => { }
+                    ));
+            try {
+                e = await liff.getProfile();
+            } catch (e) { }
+            return e;
+        })();
         var _title = "";
         var _description = "";
         var _image = "";
@@ -513,16 +532,18 @@
 
         }
 
-        window.onload = function () {
-            const defaultLiffId = "1573344717-916lVwEz";
+        window.onload = async() => {
+            //const defaultLiffId = "1573344717-916lVwEz";
 
-            // DO NOT CHANGE THIS
-            let myLiffId = "";
+            //// DO NOT CHANGE THIS
+            //let myLiffId = "";
 
-            myLiffId = defaultLiffId;
-            initializeLiffOrDie(myLiffId);
+            //myLiffId = defaultLiffId;
+            //initializeLiffOrDie(myLiffId);
+            await loginPromise;
+        };
 
-        }
+
     </script>
 </body>
 </html>
