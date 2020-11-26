@@ -53,9 +53,30 @@
         var userPictureUrl = "";
 
         window.initializeApp = (e => {
-            console.log(e);
+            userDisplayName = _.get(e, "displayName");
+            userPictureUrl = _.get(e, "pictureUrl");
+
+            var urlParam = "";
+            if (window.location.search.startsWith('?url=')) {
+                urlParam = window.location.search.substring(5);
+            }
+            if (urlParam !== "") {
+                document.getElementById("sharedUrl").value = urlParam;
+                previewUrlInfo(urlParam, true);
+            }
+
+            registerButtonHandlers();
+
+            if (liff.isLoggedIn()) {
+                toggleElement("liffLoginButton");
+
+                if (!liff.isInClient()) {
+                    toggleElement("liffLogoutButton");
+                }
+            }
+          
         })
-     
+
         const loginPromise = (async () => {
             let e;
             await liff.init({
@@ -73,10 +94,10 @@
             try {
                 e = await liff.getProfile();
             } catch (e) { }
-            return window.initializeApp(_.get(e,"userId")),e
+            return window.initializeApp(e), e
         })();
 
-      
+
 
         function initializeLiff(myLiffId) {
             liff
