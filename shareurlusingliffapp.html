@@ -200,12 +200,8 @@
                     }).then(() => liff.closeWindow());
                 }
 
-            }).catch(function (err) {
-                Swal.fire({
-                    icon: "warning",
-                    title: "訊息",
-                    text: "您已經取消分享" 
-                });
+            }).catch(function (res) {
+                document.getElementById('shareTargetPickerMessage').textContent = "您已經取消分享";
             });
         }
 
