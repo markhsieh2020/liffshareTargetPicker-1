@@ -193,10 +193,13 @@
                     createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
                 ]
             ).then(function (res) {
-                Swal.fire({
-                    icon: "success",
-                    title: "名片已分享"
-                }).then(() => liff.closeWindow());
+                if (res) {
+                    Swal.fire({
+                        icon: "success",
+                        title: "名片已分享"
+                    }).then(() => liff.closeWindow());
+                }
+
             }).catch(function (res) {
                 document.getElementById('shareTargetPickerMessage').textContent = "Sending Failed:" + JSON.stringify(res);
             });
