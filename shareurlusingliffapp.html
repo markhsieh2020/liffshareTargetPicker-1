@@ -78,7 +78,9 @@
                 }
             }
 
-        });
+        }),
+            window.togglePreviewDatas = (async e => new Promise(() => toggleElement(e)));
+
 
         const loginPromise = (async () => {
             let e;
@@ -176,7 +178,7 @@
                         img.alt = 'Preview Picture';
                     }
 
-                    togglePreviewData();
+                    window.togglePreviewDatas('previewInfo')
                     document.getElementById('shareTargetPickerMessage').textContent = "預覽成功!您可以分享好友或是直接發送"
                     //document.getElementById('previewInfo').style.display = 'block';
                 })
@@ -501,9 +503,6 @@
             }
         }
 
-        function togglePreviewData() {
-            toggleElement('previewInfo');
-        }
 
         function registerButtonHandlers() {
             //get preview
