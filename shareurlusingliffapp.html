@@ -193,6 +193,7 @@
                     createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
                 ]
             ).then(function (res) {
+                console.log('status:'+res.status);
                 if (res) {
                     Swal.fire({
                         icon: "success",
