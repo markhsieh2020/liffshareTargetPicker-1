@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Share url using LIFF App</title>
+    <title>愛月嫂</title>
     <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.3.0/sdk.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -194,8 +194,7 @@
                 Swal.fire({
                     icon: "success",
                     title: "名片已分享"
-                });
-                liff.closeWindow();
+                }).then(() => liff.closeWindow());
             }).catch(function (res) {
                 document.getElementById('shareTargetPickerMessage').textContent = "Sending Failed:" + JSON.stringify(res);
             });
@@ -209,7 +208,10 @@
                     createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
                 ]
             ).then(function (res) {
-                liff.closeWindow();
+                Swal.fire({
+                    icon: "success",
+                    title: "名片已分享"
+                }).then(() => liff.closeWindow());
             }).catch(function (res) {
                 Swal.fire({
                     icon: "error",
