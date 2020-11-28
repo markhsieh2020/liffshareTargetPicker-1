@@ -16,12 +16,14 @@
     <div class="container mt-3">
         <form class="form-group">
             <input name="shareUrl" type="url" id="sharedUrl" class="searchField form-control" />
+            <input name="liffUrl" type="url" id="liffUrl" class="searchField form-control-plaintext" readonly />
         </form>
         <!-- ACTION BUTTON -->
         <center>
             <button id="getPreviewButton" class="btn btn-primary">預覽</button>
             <button id="shareTargetPicker" class="btn btn-primary">分享好友</button>
             <button id="directSendMessage" class="btn btn-info">直接發送</button>
+            <button id="copyUrl" class="btn btn-warning">複製網址</button>
             <button id="liffLoginButton" class="btn btn-success">LINE 登入</button>
             <button id="liffLogoutButton" class="btn btn-warning" style="display: none;">LINE 登出</button>
             <div id="shareTargetPickerMessage">請先預覽再分享</div>
@@ -54,11 +56,11 @@
         var _aspectRatio = "20:13";
         var userDisplayName = "";
         var userPictureUrl = "";
-
+        var liffLink = "";
         window.initializeApp = (e => {
             userDisplayName = _.get(e, "displayName");
             userPictureUrl = _.get(e, "pictureUrl");
-
+            document.getElementById("liffUrl").value = liff.permanentLink.createUrl();
             var urlParam = "";
             if (window.location.search.startsWith('?url=')) {
                 urlParam = window.location.search.substring(5);
@@ -68,7 +70,7 @@
                 previewUrlInfo(urlParam, true);
             }
 
-            registerButtonHandlers();
+            window.registerButtonHandlers();
 
             if (liff.isLoggedIn()) {
                 toggleElement("liffLoginButton");
@@ -79,7 +81,43 @@
             }
 
         }),
-            window.togglePreviewDatas = (async e => new Promise(() => toggleElement(e)));
+            window.togglePreviewDatas = (async e => new Promise(() => toggleElement(e))),
+            window.registerButtonHandlers = async () => {
+                //get preview
+                document.getElementById('getPreviewButton').addEventListener('click',
+                    function () {
+                        var url = document.getElementById("sharedUrl").value;
+                        previewUrlInfo(url);
+                    });
+
+                document.getElementById('shareTargetPicker').addEventListener('click', function () {
+                    sendFlexMessage();
+                });
+
+                document.getElementById('directSendMessage').addEventListener('click', function () {
+                    directSendFlexMessage();
+                });
+
+                // login call, only when external browser is used
+                document.getElementById('liffLoginButton').addEventListener('click', function () {
+                    if (!liff.isLoggedIn()) {
+                        // set `redirectUri` to redirect the user to a URL other than the front page of your LIFF app.
+                        liff.login();
+                    }
+                });
+
+                // logout call, only when external browser is used
+                document.getElementById('liffLogoutButton').addEventListener('click', function () {
+                    if (liff.isLoggedIn()) {
+                        liff.logout();
+                        document.getElementById('shareTargetPickerMessage').textContent = '已登出';
+                        toggleElement("liffLoginButton");
+                        toggleElement("liffLogoutButton");
+                        liff.closeWindow();
+                    }
+                });
+
+            };
 
 
         const loginPromise = (async () => {
@@ -98,8 +136,8 @@
                     ));
             try {
                 e = await liff.getProfile();
-            } catch (e) { }
-            return window.initializeApp(e), e
+            } catch (err) { }
+            return window.initializeApp(e), e;
         })();
 
         function initializeLiff(myLiffId) {
@@ -173,13 +211,13 @@
                             console.log(this.width + 'x' + this.height);
                             _aspectRatio = this.width + ":" + this.height;
 
-                        }
+                        };
                         img.src = _image;
                         img.alt = 'Preview Picture';
                     }
 
-                    window.togglePreviewDatas('previewInfo')
-                    document.getElementById('shareTargetPickerMessage').textContent = "預覽成功!您可以分享好友或是直接發送"
+                    window.togglePreviewDatas('previewInfo');
+                    document.getElementById('shareTargetPickerMessage').textContent = "預覽成功!您可以分享好友或是直接發送";
                     //document.getElementById('previewInfo').style.display = 'block';
                 })
                 .catch(error => console.log('error', error));
@@ -207,7 +245,7 @@
                 }
 
             }).catch(function (error) {
-                document.getElementById('shareTargetPickerMessage').textContent = "Sending Failed:" + JSON.stringify(res);               
+                document.getElementById('shareTargetPickerMessage').textContent = "Sending Failed:" + JSON.stringify(res);
             });
         }
 
@@ -225,7 +263,7 @@
                         title: "名片已分享"
                     }).then(() => liff.closeWindow());
                 }
-              
+
             }).catch(function (res) {
                 Swal.fire({
                     icon: "error",
@@ -299,7 +337,7 @@
                             ]
                         }
                     ]
-                }
+                };
 
 
                 myFlexContent.header.contents.push(userPicture);
@@ -321,7 +359,7 @@
                             "size": "md"
                         }
                     ]
-                }
+                };
 
 
                 userName.contents.push({
@@ -355,7 +393,7 @@
                     "borderWidth": "2px",
                     "borderColor": "#ffffff",
                     "cornerRadius": "6px"
-                }
+                };
             };
 
             if (_title) {
@@ -516,42 +554,6 @@
         }
 
 
-        function registerButtonHandlers() {
-            //get preview
-            document.getElementById('getPreviewButton').addEventListener('click',
-                function () {
-                    var url = document.getElementById("sharedUrl").value;
-                    previewUrlInfo(url);
-                });
-
-            document.getElementById('shareTargetPicker').addEventListener('click', function () {
-                sendFlexMessage();
-            });
-
-            document.getElementById('directSendMessage').addEventListener('click', function () {
-                directSendFlexMessage();
-            });
-
-            // login call, only when external browser is used
-            document.getElementById('liffLoginButton').addEventListener('click', function () {
-                if (!liff.isLoggedIn()) {
-                    // set `redirectUri` to redirect the user to a URL other than the front page of your LIFF app.
-                    liff.login();
-                }
-            });
-
-            // logout call, only when external browser is used
-            document.getElementById('liffLogoutButton').addEventListener('click', function () {
-                if (liff.isLoggedIn()) {
-                    liff.logout();
-                    document.getElementById('shareTargetPickerMessage').textContent = '已登出';
-                    toggleElement("liffLoginButton");
-                    toggleElement("liffLogoutButton");
-                    liff.closeWindow();
-                }
-            });
-
-        }
 
         window.onload = async () => {
             //const defaultLiffId = "1573344717-916lVwEz";
