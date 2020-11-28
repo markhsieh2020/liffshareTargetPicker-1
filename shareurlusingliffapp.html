@@ -23,7 +23,7 @@
             <button id="getPreviewButton" class="btn btn-primary">預覽</button>
             <button id="shareTargetPicker" class="btn btn-primary">分享好友</button>
             <button id="directSendMessage" class="btn btn-info">直接發送</button>
-            <button id="copyUrl" class="btn btn-warning">複製網址</button>
+            <button id="copyUrlButton" class="btn btn-warning float-right">複製網址</button>
             <button id="liffLoginButton" class="btn btn-success">LINE 登入</button>
             <button id="liffLogoutButton" class="btn btn-warning" style="display: none;">LINE 登出</button>
             <div id="shareTargetPickerMessage">請先預覽再分享</div>
@@ -88,6 +88,20 @@
                     function () {
                         var url = document.getElementById("sharedUrl").value;
                         previewUrlInfo(url);
+                    });
+
+                document.getElementById('copyUrlButton').addEventListener('click',
+                    function () {
+                        var copyText = document.getElementById("liffUrl");
+
+                        /* Select the text field */
+                        copyText.select();
+                        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+                        /* Copy the text inside the text field */
+                        document.execCommand("copy");
+
+                        document.getElementById('shareTargetPickerMessage').textContent = '成功複製網址';
                     });
 
                 document.getElementById('shareTargetPicker').addEventListener('click', function () {
