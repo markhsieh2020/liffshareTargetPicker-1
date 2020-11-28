@@ -73,15 +73,23 @@
             window.registerButtonHandlers();
 
             if (liff.isLoggedIn()) {
-                toggleElement("liffLoginButton");
+                window.toggleElement("liffLoginButton");
 
                 if (!liff.isInClient()) {
-                    toggleElement("liffLogoutButton");
+                    window.toggleElement("liffLogoutButton");
                 }
             }
 
         }),
-            window.togglePreviewDatas = (async e => new Promise(() => toggleElement(e))),
+            window.togglePreviewDatas = (async e => new Promise(() => window.toggleElement(e))),
+            window.toggleElement = (async (elementId) => {
+                const elem = document.getElementById(elementId);
+                if (elem.offsetWidth > 0 && elem.offsetHeight > 0) {
+                    elem.style.display = 'none';
+                } else {
+                    elem.style.display = 'inline';
+                }
+            }),
             window.registerButtonHandlers = async () => {
                 //get preview
                 document.getElementById('getPreviewButton').addEventListener('click',
@@ -125,8 +133,8 @@
                     if (liff.isLoggedIn()) {
                         liff.logout();
                         document.getElementById('shareTargetPickerMessage').textContent = '已登出';
-                        toggleElement("liffLoginButton");
-                        toggleElement("liffLogoutButton");
+                        window.toggleElement("liffLoginButton");
+                        window.toggleElement("liffLogoutButton");
                         liff.closeWindow();
                     }
                 });
@@ -558,14 +566,7 @@
             return flex;
         }
 
-        function toggleElement(elementId) {
-            const elem = document.getElementById(elementId);
-            if (elem.offsetWidth > 0 && elem.offsetHeight > 0) {
-                elem.style.display = 'none';
-            } else {
-                elem.style.display = 'inline';
-            }
-        }
+
 
 
 
