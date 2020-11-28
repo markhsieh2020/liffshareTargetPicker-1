@@ -15,7 +15,14 @@
 <body>
     <div class="container mt-3">
         <form class="form-group">
-            <input name="shareUrl" type="url" id="sharedUrl" class="searchField form-control" />
+            <div class="input-group">
+                <input name="shareUrl" type="url" id="sharedUrl" class="searchField form-control" />
+                <span class="input-group-button">
+                    <button class="btn" type="button" data-clipboard-demo="" data-clipboard-target="#sharedUrl">
+                        <img class="clippy" src="https://clipboardjs.com/assets/images/clippy.svg" width="13" alt="Copy to clipboard">
+                    </button>
+                </span>
+            </div>
             <input name="liffUrl" type="url" id="liffUrl" class="searchField form-control-plaintext" readonly />
         </form>
         <!-- ACTION BUTTON -->
