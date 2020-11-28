@@ -119,32 +119,7 @@
                     elem.style.display = 'inline';
                 }
             }),
-            window.directSendFlexMessage = (async () => {
-                if (!_title && !_description && !_image) return;
-
-                liff.sendMessages(
-                    [
-                        createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
-                    ]
-                ).then(function (res) {
-                    if (res) {
-                        Swal.fire({
-                            icon: "success",
-                            title: "名片已分享"
-                        }).then(() => liff.closeWindow());
-                    }
-
-                }).catch(function (res) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "發生錯誤",
-                        text: "發送失敗，請於LINE內進行發送，Sending Failed:" + JSON.stringify(res)
-                    });
-                    //document.getElementById('shareTargetPickerMessage').textContent = "發送失敗，請於LINE內進行發送，Sending Failed:" + JSON.stringify(res);
-                });
-                (
-                }),
-            window.registerButtonHandlers = async () => {
+            window.registerButtonHandlers = (async () => {
                 //get preview
                 document.getElementById('getPreviewButton').addEventListener('click',
                     function () {
@@ -171,7 +146,7 @@
                 });
 
                 document.getElementById('directSendMessage').addEventListener('click', function () {
-                    window.directSendFlexMessage();
+                    directSendFlexMessage();
                 });
 
                 // login call, only when external browser is used
@@ -193,7 +168,31 @@
                     }
                 });
 
-            };
+            }),
+            window.directSendFlexMessage = (async () => {
+                if (!_title && !_description && !_image) return;
+
+                liff.sendMessages(
+                    [
+                        createFlexMessageData(_title, _description, _image, _url, _aspectRatio)
+                    ]
+                ).then(function (res) {
+                    if (res) {
+                        Swal.fire({
+                            icon: "success",
+                            title: "名片已分享"
+                        }).then(() => liff.closeWindow());
+                    }
+
+                }).catch(function (res) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "發生錯誤",
+                        text: "發送失敗，請於LINE內進行發送，Sending Failed:" + JSON.stringify(res)
+                    });
+                    //document.getElementById('shareTargetPickerMessage').textContent = "發送失敗，請於LINE內進行發送，Sending Failed:" + JSON.stringify(res);
+                });
+            });
 
 
         const loginPromise = (async () => {
