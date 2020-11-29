@@ -149,6 +149,10 @@
                         document.execCommand("copy");
 
                         document.getElementById('shareTargetPickerMessage').textContent = '成功複製網址';
+
+                        $(e.trigger).tooltip('hide')
+                            .attr('data-original-title', '已複製')
+                            .tooltip('show');
                     });
 
                 document.getElementById('shareTargetPicker').addEventListener('click', function () {
