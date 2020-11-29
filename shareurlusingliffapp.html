@@ -73,8 +73,9 @@
             console.info('Action:', e.action);
             console.info('Text:', e.text);
             console.info('Trigger:', e.trigger);
-            $(e.trigger).tooltip({ title: '已複製' });
-            $(e.trigger).tooltip('toggle');
+            $(e.trigger).attr('title', 'NEW_TITLE')
+                .tooltip('fixTitle')
+                .tooltip('show');
 
             e.clearSelection();
         });
