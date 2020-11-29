@@ -85,6 +85,11 @@
             console.error('Trigger:', e.trigger);
         });
 
+        $('[data-toggle="tooltip"]').on('shown.bs.tooltip',
+            function() {
+                $(this).attr('data-original-title', '複製');
+            });
+
         $(function () {
             $('[data-toggle="tooltip"]').tooltip({
                 delay: { show: 0, hide: 500 }
