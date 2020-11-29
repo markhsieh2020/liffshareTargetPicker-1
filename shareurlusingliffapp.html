@@ -74,7 +74,7 @@
             console.info('Text:', e.text);
             console.info('Trigger:', e.trigger);
             $(e.trigger).tooltip('hide')
-                .attr('data-original-title', 'new text')
+                .attr('data-original-title', '已複製')
                 .tooltip('show');
 
             e.clearSelection();
