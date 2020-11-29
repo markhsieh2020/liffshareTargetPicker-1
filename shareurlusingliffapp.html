@@ -18,7 +18,7 @@
             <div class="input-group">
                 <input name="shareUrl" type="url" id="sharedUrl" class="searchField form-control" />
                 <span class="input-group-button">
-                    <button class="btn" type="button" data-clipboard-demo="" data-clipboard-target="#liffUrl" data-toggle="tooltip" data-placement="top" title="">
+                    <button class="btn" type="button" data-clipboard-demo="" data-clipboard-target="#liffUrl" data-toggle="tooltip" data-placement="top" title="複製">
                         <img class="clippy" src="https://clipboardjs.com/assets/images/clippy.svg" width="13" alt="Copy to clipboard">
                     </button>
                 </span>
@@ -73,9 +73,9 @@
             console.info('Action:', e.action);
             console.info('Text:', e.text);
             console.info('Trigger:', e.trigger);
-            $(e.trigger).attr('title', 'NEW_TITLE');
-
-            $(e.trigger).tooltip('show');
+            $(e.trigger).tooltip('hide')
+                .attr('data-original-title', 'new text')
+                .tooltip('show');
 
             e.clearSelection();
         });
