@@ -66,14 +66,14 @@
         var userPictureUrl = "";
         var liffLink = "";
 
-     
+
         var clipboard = new ClipboardJS('.btn');
 
         clipboard.on('success', function (e) {
             console.info('Action:', e.action);
             console.info('Text:', e.text);
             console.info('Trigger:', e.trigger);
-            $(e.trigger).tooltip('show');
+            $(e.trigger).tooltip('toggle');
             e.clearSelection();
         });
 
@@ -82,7 +82,11 @@
             console.error('Trigger:', e.trigger);
         });
 
-     
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                delay: { show: 0, hide: 500 }
+            });
+        });
 
         window.initializeApp = (e => {
             userDisplayName = _.get(e, "displayName");
