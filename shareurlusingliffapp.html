@@ -150,7 +150,7 @@
 
                         document.getElementById('shareTargetPickerMessage').textContent = '成功複製網址';
 
-                        $(e.trigger).tooltip('hide')
+                        $(this).tooltip('hide')
                             .attr('data-original-title', '已複製')
                             .tooltip('show');
                     });
