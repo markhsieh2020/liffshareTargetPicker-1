@@ -18,7 +18,7 @@
             <div class="input-group">
                 <input name="shareUrl" type="url" id="sharedUrl" class="searchField form-control" />
                 <span class="input-group-button">
-                    <button class="btn" type="button" data-clipboard-demo="" data-clipboard-target="#liffUrl">
+                    <button class="btn" type="button" data-clipboard-demo="" data-clipboard-target="#liffUrl" aria-label="已複製">
                         <img class="clippy" src="https://clipboardjs.com/assets/images/clippy.svg" width="13" alt="Copy to clipboard">
                     </button>
                 </span>
@@ -66,6 +66,20 @@
         var userPictureUrl = "";
         var liffLink = "";
 
+        $('.btn').tooltip({
+            trigger: 'click',
+            placement: 'bottom'
+        });
+
+        function setTooltip(btn, message) {
+            $(btn).setTooltip('hide').Attr('data-original-title', message).setTooltip('show');
+        }
+
+        function hideTooltip(btn) {
+            setTimeout(function () {
+                $(btn).setTooltip('hide');
+            }, 1000);
+        }
         var clipboard = new ClipboardJS('.btn',
             {
                 text: function (trigger) {
@@ -77,11 +91,14 @@
             console.info('Action:', e.action);
             console.info('Text:', e.text);
             console.info('Trigger:', e.trigger);
-
+            setTooltip(e.trigger, 'Copied');
+            hideTooltip(e.trigger);
             e.clearSelection();
         });
 
         clipboard.on('error', function (e) {
+            setTooltip(e.trigger, 'Failed!');
+            hideTooltip(e.trigger);
             console.error('Action:', e.action);
             console.error('Trigger:', e.trigger);
         });
