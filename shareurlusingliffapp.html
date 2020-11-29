@@ -74,7 +74,7 @@
             console.info('Text:', e.text);
             console.info('Trigger:', e.trigger);
             $(e.trigger).attr('title', 'NEW_TITLE')
-                .tooltip('toggle');
+                .tooltip('show');
 
             e.clearSelection();
         });
