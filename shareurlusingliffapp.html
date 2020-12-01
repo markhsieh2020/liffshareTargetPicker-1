@@ -83,22 +83,16 @@
         clipboard.on('error', function (e) {
             console.error('Action:', e.action);
             console.error('Trigger:', e.trigger);
-        });
-
-        $('[data-toggle="tooltip"]').on('shown.bs.tooltip',
-            function () {
-                $(this).attr('data-original-title', '複製');
-                $('#copyUrlButton').attr('data-original-title', '');
-            })
-            .on('shown.bs.tooltip',
-                function () {
-                    $(this).attr('data-original-title', '');                    
-                });
+        });       
 
         $(function () {
             $('[data-toggle="tooltip"]').tooltip({
                 delay: { show: 0, hide: 500 }
-            });
+            })
+            .on('shown.bs.tooltip',
+                function () {
+                    $(this).attr('data-original-title', '複製');
+                });
         });
 
         window.initializeApp = (e => {
